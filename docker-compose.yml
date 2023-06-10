@@ -1,0 +1,22 @@
+version: '3'
+services:
+
+  bot:
+    build:
+      context: ./bot
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - ./bot:/app
+
+  liff:
+    build:
+      context: ./liff
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./liff:/app
+    depends_on:
+      - bot
