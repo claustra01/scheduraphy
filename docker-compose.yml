@@ -2,6 +2,7 @@ version: '3'
 services:
 
   bot:
+    image: scheduraphycontainer.azurecr.io/bot:latest
     build:
       context: ./bot
       dockerfile: Dockerfile
@@ -11,6 +12,7 @@ services:
       - ./bot:/app
 
   liff:
+    image: scheduraphycontainer.azurecr.io/liff:latest
     build:
       context: ./liff
       dockerfile: Dockerfile
