@@ -19,7 +19,7 @@ func main() {
 	}
 
 	// migrate DB
-	if os.Args[1] == "migrate" {
+	if len(os.Args) > 1 && os.Args[1] == "migrate" {
 		db.Migrate()
 		return
 	}
