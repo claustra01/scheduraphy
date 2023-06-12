@@ -3,42 +3,30 @@ import liff from "@line/liff"
 import "./App.css"
 
 function App() {
-  const [message, setMessage] = useState<string>("")
-  const [error, setError] = useState<string>("")
+
+  const [auth, setAuth] = useState<boolean>(false)
 
   useEffect(() => {
     liff
-      .init({
-        liffId: import.meta.env.VITE_APP_LIFF_ID,
-      })
-      .then(async () => {
+      .init({ liffId: import.meta.env.VITE_APP_LIFF_ID })
+      .then(() => {
         if (liff.isLoggedIn()) {
-          const profile = await liff.getProfile()
-          setMessage(`Hello, ${profile.displayName}!`)
+          setAuth(true)
         }
       })
-      .catch((e: Error) => {
-        setMessage('LIFF init failed.')
-        setError(`${e}`)
+      .catch(() => {
+        setAuth(false)
       })
   })
 
   return (
     <div className="App">
-      <h1>create-liff-app</h1>
-      {message && <p>{message}</p>}
-      {error && (
-        <p>
-          <code>{error}</code>
-        </p>
+      <h1>Scheduraphy</h1>
+      {auth ? (
+        <button>Googleでログイン</button>
+      ) : (
+        <p>LINEアプリ内で開いてください</p>
       )}
-      <a
-        href="https://developers.line.biz/ja/docs/liff/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        LIFF Documentation
-      </a>
     </div>
   )
 }
