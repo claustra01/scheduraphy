@@ -1,12 +1,12 @@
-import React from 'react'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
  
 export default function Callback() {
 
   const router = useRouter()
- 
+
   useEffect(() => {
+    
     const fn = async () => {
       // getパラメータの認証コードを取得する
       const code = router.query.code
@@ -15,8 +15,10 @@ export default function Callback() {
       console.log('code: ', code)
     }
     fn().then()
+
     router.replace('/')
+
   }, [router.query.code])
  
-  return <></>
+  return
 }
