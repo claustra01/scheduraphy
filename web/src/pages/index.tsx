@@ -11,7 +11,7 @@ export default function Home() {
     const loginWithGoogle = async () => {
       const response = await axios.get('/api/generate-google-oauth-url')
       const { authorizeUrl } = response.data
-      window.open(authorizeUrl, '_blank')
+      location.href = authorizeUrl
     }
     loginWithGoogle()
   })
