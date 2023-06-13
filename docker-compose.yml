@@ -11,14 +11,14 @@ services:
     volumes:
       - ./bot:/app
 
-  liff:
-    image: scheduraphycontainer.azurecr.io/liff:latest
+  web:
+    image: scheduraphycontainer.azurecr.io/web:latest
     build:
-      context: ./liff
+      context: ./web
       dockerfile: Dockerfile
     ports:
       - 3000:3000
     volumes:
-      - ./liff:/app
+      - ./web:/app
     depends_on:
       - bot
