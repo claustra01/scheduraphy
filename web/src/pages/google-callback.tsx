@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
- 
+import axios from 'axios'
+
 export default function Callback() {
 
   const router = useRouter()
@@ -12,7 +13,13 @@ export default function Callback() {
       const code = router.query.code
       if (!code) return
  
-      console.log('code: ', code)
+      const response = await axios.post('/api/get-google-auth-token', {
+        authorizationCode: code,
+      })
+
+      const { tokens } = response.data
+      console.log('tokens: ', tokens)
+      
     }
     fn().then()
 
