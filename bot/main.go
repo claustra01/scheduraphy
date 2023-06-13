@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/claustra01/scheduraphy/db"
 	"github.com/joho/godotenv"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
@@ -14,7 +15,13 @@ func main() {
 
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("err loading: %v", err)
+		log.Fatalf("[ERROR] loading: %v", err)
+	}
+
+	// migrate DB
+	if len(os.Args) > 1 && os.Args[1] == "migrate" {
+		db.Migrate()
+		return
 	}
 
 	bot, err := linebot.New(
@@ -24,7 +31,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	} else {
-		log.Print("Bot is running...")
+		log.Print("[INFO] Bot is running...")
 	}
 
 	// Setup HTTP Server for receiving requests from LINE platform
@@ -61,4 +68,5 @@ func main() {
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
+
 }

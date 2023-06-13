@@ -5,6 +5,11 @@
 docker compose up -d --build
 ```
 
+## DBのマイグレーション
+```shell
+go run main.go migrate
+```
+
 ## ACRへのpush
 ```shell
 docker login scheduraphycontainer.azurecr.io

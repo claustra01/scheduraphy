@@ -2,6 +2,7 @@ version: '3'
 services:
 
   bot:
+    image: scheduraphycontainer.azurecr.io/bot:latest
     build:
       context: ./bot
       dockerfile: Dockerfile
@@ -10,13 +11,14 @@ services:
     volumes:
       - ./bot:/app
 
-  liff:
+  web:
+    image: scheduraphycontainer.azurecr.io/web:latest
     build:
-      context: ./liff
+      context: ./web
       dockerfile: Dockerfile
     ports:
       - 3000:3000
     volumes:
-      - ./liff:/app
+      - ./web:/app
     depends_on:
       - bot
