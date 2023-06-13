@@ -1,19 +1,20 @@
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import axios from 'axios'
-import styles from '@/styles/Home.module.css'
+import { useEffect } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
 
-  const loginWithGoogle = async () => {
-    const response = await axios.get('/api/generate-google-oauth-url')
-    const { authorizeUrl } = response.data
- 
-    // Google認証ページを別タブで開く
-    window.open(authorizeUrl, '_blank')
-  }
+  useEffect(() => {
+    const loginWithGoogle = async () => {
+      const response = await axios.get('/api/generate-google-oauth-url')
+      const { authorizeUrl } = response.data
+      window.open(authorizeUrl, '_blank')
+    }
+    loginWithGoogle()
+  })
 
   return (
     <>
@@ -23,11 +24,6 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${styles.main} ${inter.className}`}>
-        <button onClick={() => loginWithGoogle()}>
-          Login with Google
-        </button>
-      </main>
     </>
   )
 }
