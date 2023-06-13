@@ -1,13 +1,18 @@
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
+import axios from 'axios'
 import styles from '@/styles/Home.module.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
 
-  const loginWithGoogle = () => {
-
+  const loginWithGoogle = async () => {
+    const response = await axios.get('/api/generate-google-oauth-url')
+    const { authorizeUrl } = response.data
+ 
+    // Google認証ページを別タブで開く
+    window.open(authorizeUrl, '_blank')
   }
 
   return (
