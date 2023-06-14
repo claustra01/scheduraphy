@@ -10,7 +10,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Respon
   const oauth2Client = new google.auth.OAuth2({
     clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
     clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
-    redirectUri: process.env.ORIGIN_URI + '/google-callback'
+    redirectUri: process.env.ORIGIN_URI + '/callback'
   })
 
   // Google認証画面のURLを生成する

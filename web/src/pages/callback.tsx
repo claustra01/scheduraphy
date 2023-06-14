@@ -23,7 +23,7 @@ export default function Callback() {
     }
     fn().then()
 
-    router.replace('/')
+    router.replace('/result')
 
   }, [router.query.code])
  
