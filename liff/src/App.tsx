@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import liff from '@line/liff'
+import GoogleLogin from './components/GoogleLogin'
+import InExternalBrowser from './components/InExternalBrowser'
 
 function App() {
 
@@ -18,18 +20,11 @@ function App() {
         setAuth(false)
       })
   })
-
-  const redirectToWeb = () => {
-    liff.openWindow({
-      url: import.meta.env.VITE_APP_REDIRECT_WEB_URL,
-      external: true,
-    });
-  }
   
   return (
-    <button onClick={() => redirectToWeb()}>
-        Login with Google
-    </button>
+    <>
+      {auth ? <GoogleLogin/> : <InExternalBrowser/>}
+    </>
   )
 }
 
