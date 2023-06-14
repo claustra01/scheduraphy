@@ -13,7 +13,7 @@ export default function Callback() {
       const code = router.query.code
       if (!code) return
  
-      const response = await axios.post('/api/get-google-auth-token', {
+      const response = await axios.post('/api/google', {
         authorizationCode: code,
       })
 

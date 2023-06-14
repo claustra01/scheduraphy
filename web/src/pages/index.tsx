@@ -19,7 +19,7 @@ export default function Home() {
     setCookie('id', lineId)
 
     const loginWithGoogle = async () => {
-      const response = await axios.get('/api/generate-google-oauth-url')
+      const response = await axios.get('/api/google')
       const { authorizeUrl } = response.data
       location.href = authorizeUrl
     }
