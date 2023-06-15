@@ -1,21 +1,26 @@
 import { DataTypes } from 'sequelize'
 import { Psql } from "./db";
 
-export const User = Psql.define('User', {
+export const User = Psql.define('user', {
   id: {
     type: DataTypes.UUIDV4,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true
   },
-  lineId: {
+  line_id: {
     type: DataTypes.STRING
   },
-  refreshToken: {
+  refresh_token: {
     type: DataTypes.STRING
   },
-  createdAt: {
-    type: DataTypes.TIME
+  created_at: {
+    type: DataTypes.TIME,
+    defaultValue: DataTypes.NOW
   },
-  updatedAt: {
-    type: DataTypes.TIME
+  updated_at: {
+    type: DataTypes.TIME,
+    defaultValue: DataTypes.NOW
   }
+}, {
+  timestamps: false
 })

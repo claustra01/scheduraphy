@@ -7,9 +7,9 @@ import (
 )
 
 type User struct {
-	id           uuid.UUID `gorm:"primaryKey"`
-	lineId       string
-	refreshToken string
-	createdAt    time.Time
-	updatedAt    time.Time
+	Id           uuid.UUID `gorm:"primaryKey"`
+	LineId       string
+	RefreshToken string
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }
