@@ -7,9 +7,8 @@ import (
 )
 
 type User struct {
-	id         uuid.UUID
+	id         uuid.UUID `gorm:"primaryKey"`
 	lineId     string
-	googleId   string
 	oauthToken string
 	createdAt  time.Time
 	updatedAt  time.Time
