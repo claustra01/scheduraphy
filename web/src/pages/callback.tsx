@@ -1,31 +1,57 @@
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useRouter } from 'next/router'
+import { useCookies } from 'react-cookie'
 
 export default function Callback() {
 
   const router = useRouter()
+  const [cookie, setCookie, removeCookie] = useCookies(['line_id'])
+  const [lineId, setLineId] = useState<string>('')
+  const [refreshToken, setRefreshToken] = useState<string>('')
 
   useEffect(() => {
-    
-    const fn = async () => {
-      // getパラメータの認証コードを取得する
-      const code = router.query.code
-      if (!code) return
- 
-      const response = await axios.post('/api/google', {
-        authorizationCode: code,
-      })
 
-      const { tokens } = response.data
-      console.log('tokens: ', tokens)
-      
+    const getCookie = () => {
+      if (cookie.line_id) {
+        setLineId(cookie.line_id)
+        removeCookie('line_id')
+      }
     }
-    fn().then()
+    
+    const getToken = async () => {
+      const authCode = router.query.code
+      if (!authCode) return
+      const res = await axios.post('/api/google', {
+        authorizationCode: authCode,
+      })
+      const { tokens } = res.data
+      setRefreshToken(tokens.refresh_token)    
+    }
 
-    router.replace('/result')
+    getCookie()
+    getToken().then()
 
   }, [router.query.code])
+
+  useEffect(() => {
+
+    const registerUser = async (id: string, token: string) => {
+      if (refreshToken === '') return
+      const res = await axios.post('/api/users', {
+        lineId: id,
+        refreshToken: token
+      })
+      if (res.status == 200) {
+        router.replace('/result')
+      } else {
+        alert('ログインに失敗しました')
+        router.replace('/')
+      }
+    }
+    registerUser(lineId, refreshToken).then()
+
+  }, [refreshToken])
  
   return
 }

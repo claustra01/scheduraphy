@@ -10,13 +10,13 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
 
   const router = useRouter()
-  const [cookie, setCookie, removeCookie] = useCookies(['id'])
+  const [cookie, setCookie, removeCookie] = useCookies(['line_id'])
   
   useEffect(() => {
 
     const lineId = router.query.id
     if (!lineId) return
-    setCookie('id', lineId)
+    setCookie('line_id', lineId)
 
     const loginWithGoogle = async () => {
       const response = await axios.get('/api/google')

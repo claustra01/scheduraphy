@@ -9,7 +9,7 @@ export const User = Psql.define('User', {
   lineId: {
     type: DataTypes.STRING
   },
-  oauthToken: {
+  refreshToken: {
     type: DataTypes.STRING
   },
   createdAt: {
