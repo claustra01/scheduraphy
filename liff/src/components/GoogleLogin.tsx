@@ -1,23 +1,23 @@
-import liff from "@line/liff";
-import { LineUser } from "../App";
+import liff from "@line/liff"
 
 type Props = {
-  user: LineUser
+  userId: string,
+  displayName: string
 }
 
-function GoogleLogin(props: Props) {
+function GoogleLogin({props}: {props: Props}) {
 
   const redirectToWeb = () => {
     liff.openWindow({
-      url: import.meta.env.VITE_APP_REDIRECT_WEB_URL + '?id=' + props.user.id,
+      url: import.meta.env.VITE_APP_REDIRECT_WEB_URL + '?id=' + props.userId,
       external: true,
-    });
+    })
   }
 
   return (
     <>
       <p>
-        ようこそ、{props.user.displayName}
+        ようこそ、{props.displayName}
       </p>
       <button onClick={() => redirectToWeb()}>
           Login with Google

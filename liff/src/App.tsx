@@ -1,40 +1,33 @@
-import { useEffect, useState } from 'react'
-import './App.css'
-import liff from '@line/liff'
+import { useEffect, useState } from "react"
+import liff from "@line/liff"
+import "./App.css"
 import GoogleLogin from './components/GoogleLogin'
 import InExternalBrowser from './components/InExternalBrowser'
-
-export type LineUser = {
-  id: string,
-  displayName: string,
-}
 
 function App() {
 
   const [auth, setAuth] = useState<boolean>(false)
-  const [lineUser, setLineUser] = useState<LineUser>({id: '', displayName: ''})
+  const [userId, setUserId] = useState<string>('')
+  const [displayName, setDisplayName] = useState<string>('')
 
   useEffect(() => {
     liff
-      .init({ liffId: import.meta.env.VITE_APP_LIFF_ID })
-      .then(async () => {
-        if (liff.isLoggedIn()) {
-          const profile = await liff.getProfile()
-          setAuth(true)
-          setLineUser({
-            id: profile.userId,
-            displayName: profile.displayName
-          })
-        }
+    .init({ liffId: import.meta.env.VITE_APP_LIFF_ID })
+    .then(async () => {
+        const profile = await liff.getProfile()
+        setAuth(true)
+        setUserId(profile.userId)
+        setDisplayName(profile.displayName)
       })
-      .catch(() => {
+      .catch((e: Error) => {
         setAuth(false)
+        alert(e)
       })
   })
-  
+
   return (
     <>
-      {auth ? <GoogleLogin user={lineUser} /> : <InExternalBrowser/>}
+      {auth ? <GoogleLogin props={{ userId, displayName }} /> : <InExternalBrowser/>}
     </>
   )
 }
