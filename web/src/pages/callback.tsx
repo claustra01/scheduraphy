@@ -74,9 +74,8 @@ export default function Callback() {
     const redirect = async () => {
       if (lineId === '' || tokens.toString() === '{}') return
       const userExist = await searchUser(lineId)
-      console.log(tokens)
       if (userExist) {
-        if (tokens.refresh_token === '') {
+        if (!tokens.refresh_token) {
           // トークンが既に発行済み
           router.replace('/result')
         } else {
