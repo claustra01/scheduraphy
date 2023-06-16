@@ -1,35 +1,34 @@
-import { useEffect, useState } from 'react'
-import './App.css'
-import liff from '@line/liff'
+import { useEffect, useState } from "react"
+import liff from "@line/liff"
+import "./App.css"
+import GoogleLogin from './components/GoogleLogin'
+import InExternalBrowser from './components/InExternalBrowser'
 
 function App() {
 
   const [auth, setAuth] = useState<boolean>(false)
+  const [userId, setUserId] = useState<string>('')
+  const [displayName, setDisplayName] = useState<string>('')
 
   useEffect(() => {
     liff
-      .init({ liffId: import.meta.env.VITE_APP_LIFF_ID })
-      .then(() => {
-        if (liff.isLoggedIn()) {
-          setAuth(true)
-        }
+    .init({ liffId: import.meta.env.VITE_LIFF_ID })
+    .then(async () => {
+        const profile = await liff.getProfile()
+        setAuth(true)
+        setUserId(profile.userId)
+        setDisplayName(profile.displayName)
       })
-      .catch(() => {
+      .catch((e: Error) => {
         setAuth(false)
+        alert(e)
       })
   })
 
-  const redirectToWeb = () => {
-    liff.openWindow({
-      url: import.meta.env.VITE_APP_REDIRECT_WEB_URL,
-      external: true,
-    });
-  }
-  
   return (
-    <button onClick={() => redirectToWeb()}>
-        Login with Google
-    </button>
+    <>
+      {auth ? <GoogleLogin props={{ userId, displayName }} /> : <InExternalBrowser/>}
+    </>
   )
 }
 
