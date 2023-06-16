@@ -77,11 +77,14 @@ export default function Callback() {
       console.log(tokens)
       if (userExist) {
         if (tokens.refresh_token === '') {
+          // トークンが既に発行済み
           router.replace('/result')
         } else {
+          // トークン更新
           updateUser(lineId, tokens.refresh_token)
         }
       } else {
+        // ユーザー新規登録
         registerUser(lineId, tokens.refresh_token)
       }
     }
