@@ -12,7 +12,7 @@ function App() {
 
   useEffect(() => {
     liff
-    .init({ liffId: import.meta.env.VITE_APP_LIFF_ID })
+    .init({ liffId: import.meta.env.VITE_LIFF_ID })
     .then(async () => {
         const profile = await liff.getProfile()
         setAuth(true)

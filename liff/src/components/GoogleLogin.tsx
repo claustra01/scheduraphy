@@ -9,7 +9,7 @@ function GoogleLogin({props}: {props: Props}) {
 
   const redirectToWeb = () => {
     liff.openWindow({
-      url: import.meta.env.VITE_APP_REDIRECT_WEB_URL + '?id=' + props.userId,
+      url: import.meta.env.VITE_REDIRECT_WEB_URL + '?id=' + props.userId,
       external: true,
     })
   }
