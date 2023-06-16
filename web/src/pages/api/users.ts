@@ -17,9 +17,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           }
         })
         if (user != null) {
-          res.status(200).json(user.toJSON)
+          res.status(200).json(user.toJSON())
         } else {
-          res.status(503).end()     
+          res.status(200).json({})
         }
       } catch(error) {
         console.error(error)   
@@ -36,9 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           refresh_token: refreshToken,
         })
         if (user != null) {
-          res.status(200).json(user.toJSON)
-        } else {
-          res.status(503).end()     
+          res.status(200).json(user.toJSON())
         }
       } catch(error) {
         console.error(error)   
@@ -61,7 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             updated_at: new Date()
           })
           await user.save()
-          res.status(200).json(user.toJSON)
+          res.status(200).json(user.toJSON())
         } else {
           res.status(503).end()     
         }
