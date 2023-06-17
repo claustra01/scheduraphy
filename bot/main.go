@@ -58,6 +58,9 @@ func main() {
 				case *linebot.StickerMessage:
 					reply.Sticker(bot, event, message)
 
+				case *linebot.ImageMessage:
+					reply.Image(bot, event)
+
 				}
 			}
 		}
