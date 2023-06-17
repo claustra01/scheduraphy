@@ -2,9 +2,8 @@ package reply
 
 import (
 	"fmt"
-	"io"
+	"io/ioutil"
 	"log"
-	"os"
 
 	"github.com/claustra01/scheduraphy/token"
 	"github.com/claustra01/scheduraphy/util"
@@ -21,24 +20,21 @@ func Image(bot *linebot.Client, event *linebot.Event, message *linebot.ImageMess
 	}
 	defer content.Content.Close()
 
-	// 画像を一時保存
-	filePath := "./image.png"
-	file, err := os.Create(filePath)
+	// 画像データをバイトスライスに読み込む
+	imageData, err := ioutil.ReadAll(content.Content)
 	if err != nil {
 		log.Print(err)
 		return
 	}
-	_, err = io.Copy(file, content.Content)
-	if err != nil {
-		log.Print(err)
-		return
-	}
-	file.Close()
 
 	// 文字抽出
-	file, _ = os.Open(filePath)
-	imageStr := util.ExtractChar(file)
-	fmt.Println(imageStr)
+	imageStr := util.ExtractChar(imageData)
+
+	// 抽出結果を返信（後で消す）
+	_, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(imageStr)).Do()
+	if err != nil {
+		log.Print(err)
+	}
 
 	sendUserId := event.Source.UserID
 	refreshToken := token.GetRefreshToken(sendUserId)

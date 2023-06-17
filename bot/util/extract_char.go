@@ -4,30 +4,23 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
-	"mime/multipart"
 	"net/http"
 	"os"
 )
 
-func ExtractChar(file *os.File) string {
+func ExtractChar(imageData []byte) string {
 
 	key := os.Getenv("AZURE_COMPUTER_VISION_KEY")
 	endpoint := os.Getenv("AZURE_COMPUTER_VISION_ENDPOINT")
 
-	// 画像の読み込み
-	var buf bytes.Buffer
-	w := multipart.NewWriter(&buf)
-	fw, _ := w.CreateFormFile("data", "image")
-	io.Copy(fw, file)
-	file.Close()
-	w.Close()
+	// 画像データをリクエストボディに設定
+	body := bytes.NewReader(imageData)
 
 	// REST APIの実行
 	uri := endpoint + "/vision/v2.1/ocr?language=unk&detectOrientation=true"
-	req, _ := http.NewRequest("POST", uri, &buf)
-	req.Header.Add("Content-Type", w.FormDataContentType())
+	req, _ := http.NewRequest("POST", uri, body)
+	req.Header.Set("Content-Type", "application/octet-stream")
 	req.Header.Add("Ocp-Apim-Subscription-Key", key)
 	client := &http.Client{}
 	resp, _ := client.Do(req)
