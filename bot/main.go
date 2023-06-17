@@ -59,7 +59,7 @@ func main() {
 					reply.Sticker(bot, event, message)
 
 				case *linebot.ImageMessage:
-					reply.Image(bot, event)
+					reply.Image(bot, event, message)
 
 				}
 			}
