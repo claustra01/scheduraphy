@@ -58,15 +58,11 @@ func main() {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 
-				case *linebot.TextMessage:
-					reply.Text(bot, event, message)
-
-				case *linebot.StickerMessage:
-					reply.Sticker(bot, event, message)
-
 				case *linebot.ImageMessage:
 					reply.Image(bot, event, message)
 
+				default:
+					reply.Default(bot, event)
 				}
 			}
 		}
