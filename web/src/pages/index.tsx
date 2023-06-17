@@ -34,7 +34,7 @@ export default function Home() {
         setCookie('line_id', lineId)
         loginWithGoogle()
       } else {
-        router.replace('/notfriend')
+        router.replace('/unregistered')
       }
     }
     redirect().then()

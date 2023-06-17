@@ -12,6 +12,17 @@ import (
 
 func Image(bot *linebot.Client, event *linebot.Event, message *linebot.ImageMessage) {
 
+	sendUserId := event.Source.UserID
+	refreshToken := query.GetRefreshToken(sendUserId)
+
+	if refreshToken == "" {
+		Unregistered(bot, event)
+		return
+	}
+
+	accessToken := util.GetAccessToken(refreshToken)
+	fmt.Print(accessToken)
+
 	// 画像データを取得
 	content, err := bot.GetMessageContent(message.ID).Do()
 	if err != nil {
@@ -35,16 +46,5 @@ func Image(bot *linebot.Client, event *linebot.Event, message *linebot.ImageMess
 	if err != nil {
 		log.Print(err)
 	}
-
-	sendUserId := event.Source.UserID
-	refreshToken := query.GetRefreshToken(sendUserId)
-
-	if refreshToken == "" {
-		// ユーザー登録を促すメッセージを返す
-		return
-	}
-
-	accessToken := util.GetAccessToken(refreshToken)
-	fmt.Print(accessToken)
 
 }

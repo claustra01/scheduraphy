@@ -53,20 +53,17 @@ func main() {
 			if event.Type == linebot.EventTypeFollow {
 				lineId := event.Source.UserID
 				query.PostUser(lineId)
+				reply.Friend(bot, event)
 			}
 
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 
-				case *linebot.TextMessage:
-					reply.Text(bot, event, message)
-
-				case *linebot.StickerMessage:
-					reply.Sticker(bot, event, message)
-
 				case *linebot.ImageMessage:
 					reply.Image(bot, event, message)
 
+				default:
+					reply.Default(bot, event)
 				}
 			}
 		}
