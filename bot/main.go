@@ -53,6 +53,7 @@ func main() {
 			if event.Type == linebot.EventTypeFollow {
 				lineId := event.Source.UserID
 				query.PostUser(lineId)
+				reply.Friend(bot, event)
 			}
 
 			if event.Type == linebot.EventTypeMessage {
