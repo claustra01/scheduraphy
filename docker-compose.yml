@@ -20,8 +20,6 @@ services:
       - 3001:3001
     volumes:
       - ./liff:/app
-    depends_on:
-      - web
 
   web:
     image: scheduraphycontainer.azurecr.io/web:latest

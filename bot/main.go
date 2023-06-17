@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/claustra01/scheduraphy/db"
+	"github.com/claustra01/scheduraphy/query"
 	"github.com/claustra01/scheduraphy/reply"
 	"github.com/joho/godotenv"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
@@ -49,6 +50,11 @@ func main() {
 		}
 
 		for _, event := range events {
+			if event.Type == linebot.EventTypeFollow {
+				lineId := event.Source.UserID
+				query.PostUser(lineId)
+			}
+
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 

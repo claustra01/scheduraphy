@@ -1,11 +1,8 @@
 import Head from 'next/head'
-import { Inter } from 'next/font/google'
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useCookies } from 'react-cookie'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
 
@@ -16,14 +13,31 @@ export default function Home() {
 
     const lineId = router.query.id
     if (!lineId) return
-    setCookie('line_id', lineId)
+
+    const searchUser = async (id: string) => {
+      const res = await axios.get('/api/users?lineId=' + id)
+      if (res.status === 200 && res.data.line_id === id) {
+        return true
+      } else {
+        return false
+      }
+    }
 
     const loginWithGoogle = async () => {
       const response = await axios.get('/api/google')
       const { authorizeUrl } = response.data
       location.href = authorizeUrl
     }
-    loginWithGoogle()
+
+    const redirect = async () => {
+      if (await searchUser(lineId as string)) {
+        setCookie('line_id', lineId)
+        loginWithGoogle()
+      } else {
+        router.replace('/notfriend')
+      }
+    }
+    redirect().then()
 
   }, [router.query.id])
 

@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { User } from './db/models';
-import { NOW, UUIDV4 } from 'sequelize';
-import { type } from 'os';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -20,23 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           res.status(200).json(user.toJSON())
         } else {
           res.status(200).json({})
-        }
-      } catch(error) {
-        console.error(error)   
-        res.status(503).end()     
-      }
-      break
-
-    // 新規ユーザー作成
-    case 'POST':
-      try {
-        const { lineId, refreshToken } = req.body
-        const user = await User.create({
-          line_id: lineId,
-          refresh_token: refreshToken,
-        })
-        if (user != null) {
-          res.status(200).json(user.toJSON())
         }
       } catch(error) {
         console.error(error)   

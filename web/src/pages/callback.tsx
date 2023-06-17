@@ -36,29 +36,7 @@ export default function Callback() {
 
   useEffect(() => {
 
-    const searchUser = async (id: string) => {
-      const res = await axios.get('/api/users?lineId=' + id)
-      if (res.status === 200 && res.data.line_id === id) {
-        return true
-      } else {
-        return false
-      }
-    }
-
-    const registerUser = async (id: string, token: string) => {
-      const res = await axios.post('/api/users', {
-        lineId: id,
-        refreshToken: token
-      })
-      if (res.status === 200) {
-        router.replace('/result')
-      } else {
-        alert('ログインに失敗しました')
-        router.replace('/')
-      }
-    }
-
-    const updateUser = async (id: string, token: string) => {
+    const updateToken = async (id: string, token: string) => {
       const res = await axios.patch('/api/users', {
         lineId: id,
         refreshToken: token
@@ -73,18 +51,12 @@ export default function Callback() {
 
     const redirect = async () => {
       if (lineId === '' || tokens.toString() === '{}') return
-      const userExist = await searchUser(lineId)
-      if (userExist) {
-        if (!tokens.refresh_token) {
-          // トークンが既に発行済み
-          router.replace('/result')
-        } else {
-          // トークン更新
-          updateUser(lineId, tokens.refresh_token)
-        }
+      if (!tokens.refresh_token) {
+        // トークンが既に発行済み
+        router.replace('/result')
       } else {
-        // ユーザー新規登録
-        registerUser(lineId, tokens.refresh_token)
+        // トークン更新
+        updateToken(lineId, tokens.refresh_token)
       }
     }
     redirect().then()
