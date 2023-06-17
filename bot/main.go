@@ -32,6 +32,7 @@ func main() {
 		log.Fatal(err)
 	} else {
 		log.Print("[INFO] Bot is running...")
+		db.Connect()
 	}
 
 	// Setup HTTP Server for receiving requests from LINE platform

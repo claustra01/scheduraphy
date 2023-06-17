@@ -2,7 +2,6 @@ package token
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 
@@ -10,7 +9,7 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
-func GetToken(refreshToken string) {
+func GetAccessToken(refreshToken string) string {
 
 	config := &oauth2.Config{
 		ClientID:     os.Getenv("GOOGLE_OAUTH_CLIENT_ID"),
@@ -29,5 +28,5 @@ func GetToken(refreshToken string) {
 		log.Fatalf("Failed to get new token: %v", err)
 	}
 
-	fmt.Printf("Access Token: %s\n", newToken.AccessToken)
+	return newToken.AccessToken
 }
