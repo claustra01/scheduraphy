@@ -3,8 +3,8 @@ package util
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 )
@@ -14,24 +14,25 @@ func ExtractChar(imageData []byte) string {
 	key := os.Getenv("AZURE_COMPUTER_VISION_KEY")
 	endpoint := os.Getenv("AZURE_COMPUTER_VISION_ENDPOINT")
 
-	// 画像データをリクエストボディに設定
-	body := bytes.NewReader(imageData)
-
 	// REST APIの実行
 	uri := endpoint + "/vision/v2.1/ocr?language=unk&detectOrientation=true"
-	req, _ := http.NewRequest("POST", uri, body)
+	req, _ := http.NewRequest("POST", uri, bytes.NewReader(imageData))
 	req.Header.Set("Content-Type", "application/octet-stream")
 	req.Header.Add("Ocp-Apim-Subscription-Key", key)
 	client := &http.Client{}
-	resp, _ := client.Do(req)
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Print(err)
+		return ""
+	}
 	defer resp.Body.Close()
 
 	// JSONに展開
 	var data interface{}
 	dataStr, _ := ioutil.ReadAll(resp.Body)
-	err := json.Unmarshal([]byte(dataStr), &data)
+	err = json.Unmarshal([]byte(dataStr), &data)
 	if err != nil {
-		fmt.Println("JSON parsing error:", err)
+		log.Print(err)
 		return ""
 	}
 
@@ -51,5 +52,4 @@ func ExtractChar(imageData []byte) string {
 	}
 
 	return imageStr
-
 }
