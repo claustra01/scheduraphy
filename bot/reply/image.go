@@ -40,7 +40,7 @@ func Image(bot *linebot.Client, event *linebot.Event, message *linebot.ImageMess
 	refreshToken := query.GetRefreshToken(sendUserId)
 
 	if refreshToken == "" {
-		// ユーザー登録を促すメッセージを返す
+		Unregistered(bot, event)
 		return
 	}
 
