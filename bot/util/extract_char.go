@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-func ExtractChar(file *os.File) {
+func ExtractChar(file *os.File) string {
 
 	key := os.Getenv("AZURE_COMPUTER_VISION_KEY")
 	endpoint := os.Getenv("AZURE_COMPUTER_VISION_ENDPOINT")
@@ -39,11 +39,11 @@ func ExtractChar(file *os.File) {
 	err := json.Unmarshal([]byte(dataStr), &data)
 	if err != nil {
 		fmt.Println("JSON parsing error:", err)
-		return
+		return ""
 	}
 
 	// 文字列に整形
-	extractedString := ""
+	imageStr := ""
 	regions := data.(map[string]interface{})["regions"].([]interface{})
 	for _, region := range regions {
 		lines := region.(map[string]interface{})["lines"].([]interface{})
@@ -51,12 +51,12 @@ func ExtractChar(file *os.File) {
 			words := line.(map[string]interface{})["words"].([]interface{})
 			for _, word := range words {
 				text := word.(map[string]interface{})["text"].(string)
-				extractedString += text
+				imageStr += text
 			}
-			extractedString += "\n"
+			imageStr += "\n"
 		}
 	}
 
-	fmt.Println(extractedString)
+	return imageStr
 
 }
