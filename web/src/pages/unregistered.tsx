@@ -4,7 +4,7 @@ export default function Result() {
  
   return (
     <>
-      LINEの友達登録が必要です
+      ログインにはLINEの友達追加が必要です
     </>
   )
 }
