@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 
+	"github.com/claustra01/scheduraphy/query"
 	"github.com/claustra01/scheduraphy/token"
 	"github.com/claustra01/scheduraphy/util"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
@@ -37,7 +38,7 @@ func Image(bot *linebot.Client, event *linebot.Event, message *linebot.ImageMess
 	}
 
 	sendUserId := event.Source.UserID
-	refreshToken := token.GetRefreshToken(sendUserId)
+	refreshToken := query.GetRefreshToken(sendUserId)
 
 	if refreshToken == "" {
 		// ユーザー登録を促すメッセージを返す

@@ -1,17 +1,14 @@
-package token
+package query
 
 import (
-	"log"
-
 	"github.com/claustra01/scheduraphy/db"
 )
 
-func GetRefreshToken(lineId string) string {
+func GetUser(lineId string) *db.User {
 	user := new(db.User)
 	result := db.Psql.First(&user, "line_id = ?", lineId)
 	if result.RowsAffected == 0 {
-		log.Print("[INFO] User not found!")
-		return ""
+		return nil
 	}
-	return user.RefreshToken
+	return user
 }
