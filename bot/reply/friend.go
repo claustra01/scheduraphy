@@ -10,11 +10,7 @@ import (
 
 func Friend(bot *linebot.Client, event *linebot.Event) {
 	liffUrl := os.Getenv("LIFF_URL")
-	message := fmt.Sprintf(`
-	友達追加ありがとう!!
-	まずはこのリンクからGoogleでログインしてね!!
-	%s`, liffUrl)
-
+	message := fmt.Sprintf("友達追加ありがとう!!\nまずはこのリンクからGoogleでログインしてね!!\n%s", liffUrl)
 	_, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message)).Do()
 	if err != nil {
 		log.Print(err)

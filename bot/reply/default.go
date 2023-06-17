@@ -7,10 +7,7 @@ import (
 )
 
 func Default(bot *linebot.Client, event *linebot.Event) {
-	message := `
-	画像以外には対応してないんだ!
-	ごめんね!!
-	`
+	message := "画像以外には対応してないんだ!\nごめんね!!"
 	_, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message)).Do()
 	if err != nil {
 		log.Print(err)

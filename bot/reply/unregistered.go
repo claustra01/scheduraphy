@@ -10,11 +10,7 @@ import (
 
 func Unregistered(bot *linebot.Client, event *linebot.Event) {
 	liffUrl := os.Getenv("LIFF_URL")
-	message := fmt.Sprintf(`
-	まだGoogleでログインしてないみたい……
-	このリンクからログインできるよ!!
-	%s`, liffUrl)
-
+	message := fmt.Sprintf("まだGoogleでログインしてないみたい……\nこのリンクからログインできるよ!!\n%s", liffUrl)
 	_, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message)).Do()
 	if err != nil {
 		log.Print(err)
