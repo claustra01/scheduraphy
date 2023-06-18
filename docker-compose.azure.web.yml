@@ -1,5 +1,5 @@
 version: '3'
 services:
 
-  bot:
+  web:
     image: scheduraphycontainer.azurecr.io/web:latest
