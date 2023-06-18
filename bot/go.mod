@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	cloud.google.com/go/compute/metadata v0.2.0 // indirect
+	github.com/ayush6624/go-chatgpt v0.2.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
