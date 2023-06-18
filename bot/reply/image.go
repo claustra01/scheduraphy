@@ -14,13 +14,16 @@ func Image(bot *linebot.Client, event *linebot.Event, message *linebot.ImageMess
 
 	sendUserId := event.Source.UserID
 	refreshToken := query.GetRefreshToken(sendUserId)
-
 	if refreshToken == "" {
 		Unregistered(bot, event)
 		return
 	}
 
 	accessToken := util.GetAccessToken(refreshToken)
+	if accessToken == "" {
+		Unregistered(bot, event)
+		return
+	}
 	fmt.Print(accessToken)
 
 	// 画像データを取得
