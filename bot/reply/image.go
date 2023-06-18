@@ -1,7 +1,6 @@
 package reply
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 
@@ -12,6 +11,7 @@ import (
 
 func Image(bot *linebot.Client, event *linebot.Event, message *linebot.ImageMessage) {
 
+	// DBからリフレッシュトークンを取得
 	sendUserId := event.Source.UserID
 	refreshToken := query.GetRefreshToken(sendUserId)
 	if refreshToken == "" {
@@ -19,14 +19,14 @@ func Image(bot *linebot.Client, event *linebot.Event, message *linebot.ImageMess
 		return
 	}
 
+	// アクセストークンを取得
 	accessToken := util.GetAccessToken(refreshToken)
 	if accessToken == "" {
-		Unregistered(bot, event)
+		Expired(bot, event)
 		return
 	}
-	fmt.Print(accessToken)
 
-	// 画像データを取得
+	// 送信された画像データを取得
 	content, err := bot.GetMessageContent(message.ID).Do()
 	if err != nil {
 		log.Print(err)
@@ -34,20 +34,26 @@ func Image(bot *linebot.Client, event *linebot.Event, message *linebot.ImageMess
 	}
 	defer content.Content.Close()
 
-	// 画像データをバイトスライスに読み込む
+	// 画像データをバイト配列に読み込む
 	imageData, err := ioutil.ReadAll(content.Content)
 	if err != nil {
 		log.Print(err)
 		return
 	}
 
-	// 文字抽出
+	// 文字抽出&整形
 	imageStr := util.ExtractChar(imageData)
+	eventData := util.FormatJson(imageStr)
 
-	// 抽出結果を返信（後で消す）
-	_, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(imageStr)).Do()
-	if err != nil {
-		log.Print(err)
+	// カレンダーに登録
+	result := util.RegisterEvent(eventData, accessToken)
+	switch result {
+	case "Successful":
+		Successful(bot, event, eventData)
+	case "ImageError":
+		NoEvent(bot, event)
+	default:
+		Others(bot, event)
 	}
 
 }

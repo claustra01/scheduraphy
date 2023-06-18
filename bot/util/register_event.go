@@ -2,7 +2,6 @@ package util
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 
@@ -11,29 +10,21 @@ import (
 	"google.golang.org/api/calendar/v3"
 )
 
-func RegisterEvent(data interface{}, accessToken string) {
+func RegisterEvent(data interface{}, accessToken string) string {
 
+	// 画像が読み込めているか確認
 	eventType := data.(map[string]interface{})["type"].(string)
 	if eventType == "null" {
-
-		// 画像が読み込めなかった返信を行う
-		log.Print("aaaaaaaaaaaaaaaaaaaaaa")
-		return
+		return "ImageError"
 	}
 
-	title := data.(map[string]interface{})["title"].(string)
-	location := data.(map[string]interface{})["location"].(string)
-	startTime := data.(map[string]interface{})["start"].(string)
-	endTime := data.(map[string]interface{})["end"].(string)
-
+	// 認証してカレンダーを作成
 	config := &oauth2.Config{
 		ClientID:     os.Getenv("GOOGLE_OAUTH_CLIENT_ID"),
 		ClientSecret: os.Getenv("GOOGLE_OAUTH_CLIENT_SECRET"),
 		Scopes:       []string{"https://www.googleapis.com/auth/calendar"},
 		Endpoint:     google.Endpoint,
 	}
-
-	log.Print(title, location, startTime, endTime)
 
 	ctx := context.Background()
 	token := &oauth2.Token{
@@ -43,10 +34,16 @@ func RegisterEvent(data interface{}, accessToken string) {
 
 	srv, err := calendar.New(client)
 	if err != nil {
-		log.Fatal("クライアントの作成に失敗しました:", err)
+		log.Print(err)
+		return ""
 	}
 
-	// 登録する予定の情報を作成します
+	// 登録する予定の情報を作成
+	title := data.(map[string]interface{})["title"].(string)
+	location := data.(map[string]interface{})["location"].(string)
+	startTime := data.(map[string]interface{})["start"].(string)
+	endTime := data.(map[string]interface{})["end"].(string)
+
 	event := &calendar.Event{
 		Summary:  title,
 		Location: location,
@@ -60,18 +57,13 @@ func RegisterEvent(data interface{}, accessToken string) {
 		},
 	}
 
-	// 予定を登録します
-	calendarID := "primary" // 予定を登録するカレンダーのID（"primary"はデフォルトのカレンダー）
+	// 予定を登録
+	calendarID := "primary"
 	event, err = srv.Events.Insert(calendarID, event).Do()
 	if err != nil {
-		log.Fatal("予定の登録に失敗しました:", err)
+		log.Print(err)
+		return ""
 	}
 
-	// 取得した予定の詳細を表示します
-	fmt.Println("登録した予定の詳細:")
-	fmt.Println("タイトル:", event.Summary)
-	fmt.Println("場所:", event.Location)
-	fmt.Println("説明:", event.Description)
-	fmt.Println("開始日時:", event.Start.DateTime)
-	fmt.Println("終了日時:", event.End.DateTime)
+	return "Successful"
 }
