@@ -7,7 +7,7 @@ import (
 )
 
 func NoEvent(bot *linebot.Client, event *linebot.Event) {
-	message := "予定に関係ない画像が検出されたみたい……\n余計な部分をトリミングするとちゃんと動くかも!"
+	message := "これは予定に関係ない画像だと思うんだ……\n余計な部分をトリミングしてからもう一回試してみて!"
 	_, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message)).Do()
 	if err != nil {
 		log.Print(err)
