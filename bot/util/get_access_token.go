@@ -25,7 +25,8 @@ func GetAccessToken(refreshToken string) string {
 
 	newToken, err := config.TokenSource(ctx, token).Token()
 	if err != nil {
-		log.Fatalf("Failed to get new token: %v", err)
+		log.Print(err)
+		return ""
 	}
 
 	return newToken.AccessToken

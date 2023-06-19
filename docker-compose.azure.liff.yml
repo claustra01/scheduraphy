@@ -1,5 +1,5 @@
 version: '3'
 services:
 
-  bot:
+  liff:
     image: scheduraphycontainer.azurecr.io/liff:latest
