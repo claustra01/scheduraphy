@@ -1,0 +1,5 @@
+version: '3'
+services:
+
+  liff:
+    image: scheduraphycontainer.azurecr.io/liff:latest

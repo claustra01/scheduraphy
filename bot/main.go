@@ -1,12 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/claustra01/scheduraphy/db"
+	"github.com/claustra01/scheduraphy/query"
+	"github.com/claustra01/scheduraphy/reply"
 	"github.com/joho/godotenv"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
@@ -32,6 +33,7 @@ func main() {
 		log.Fatal(err)
 	} else {
 		log.Print("[INFO] Bot is running...")
+		db.Connect()
 	}
 
 	// Setup HTTP Server for receiving requests from LINE platform
@@ -46,27 +48,28 @@ func main() {
 			}
 			return
 		}
+
 		for _, event := range events {
+			if event.Type == linebot.EventTypeFollow {
+				lineId := event.Source.UserID
+				query.PostUser(lineId)
+				reply.Friend(bot, event)
+			}
+
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
-				case *linebot.TextMessage:
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
-						log.Print(err)
-					}
-				case *linebot.StickerMessage:
-					replyMessage := fmt.Sprintf(
-						"sticker id is %s, stickerResourceType is %s", message.StickerID, message.StickerResourceType)
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(replyMessage)).Do(); err != nil {
-						log.Print(err)
-					}
+
+				case *linebot.ImageMessage:
+					reply.Image(bot, event, message)
+
+				default:
+					reply.Default(bot, event)
 				}
 			}
 		}
 	})
-	// This is just sample code.
-	// For actual use, you must support HTTPS by using `ListenAndServeTLS`, a reverse proxy or something else.
+
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
-
 }
