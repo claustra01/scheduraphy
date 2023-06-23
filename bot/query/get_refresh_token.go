@@ -1,13 +1,14 @@
 package query
 
 import (
-	"errors"
+	"log"
 )
 
-func GetRefreshToken(lineId string) (string, error) {
+func GetRefreshToken(lineId string) string {
 	user := GetUser(lineId)
 	if user == nil {
-		return "", errors.New("[ERROR] User not found!")
+		log.Print("[INFO] User not found!")
+		return ""
 	}
-	return user.RefreshToken, nil
+	return user.RefreshToken
 }

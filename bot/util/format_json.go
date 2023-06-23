@@ -3,7 +3,6 @@ package util
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -11,13 +10,12 @@ import (
 	"github.com/ayush6624/go-chatgpt"
 )
 
-func FormatJson(rawStr string) (interface{}, error) {
+func FormatJson(rawStr string) interface{} {
 
 	key := os.Getenv("OPENAI_KEY")
 	c, err := chatgpt.NewClient(key)
 	if err != nil {
-		log.Print(err)
-		return nil, errors.New("[ERROR] ChatGPT Client Error!")
+		log.Fatal(err)
 	}
 
 	ctx := context.Background()
@@ -28,8 +26,7 @@ func FormatJson(rawStr string) (interface{}, error) {
 
 	res, err := c.SimpleSend(ctx, str)
 	if err != nil {
-		log.Print(err)
-		return nil, errors.New("[ERROR] ChatGPT Response Error!")
+		log.Fatal(err)
 	}
 
 	str = fmt.Sprintf(`イベントのポスターの写真や告知のスクリーンショットなどから画像認識AIを用いて文字のみを出力した文章を渡します．この文章を以下に示す例に則ったJSON形式に整形してください．ただし，\"venue\"に対応するものが文章中に見つからなかった場合，そのキーを省略したりせず，値を空文字列にしてください．\n----------
@@ -42,16 +39,14 @@ func FormatJson(rawStr string) (interface{}, error) {
 
 	res, err = c.SimpleSend(ctx, str)
 	if err != nil {
-		log.Print(err)
-		return nil, errors.New("[ERROR] ChatGPT Response Error!")
+		log.Fatal(err)
 	}
 
 	var data interface{}
 	err = json.Unmarshal([]byte(res.Choices[0].Message.Content), &data)
 	if err != nil {
 		log.Print(err)
-		return nil, errors.New("[ERROR] Json Parsing Error!")
 	}
 
-	return data, nil
+	return data
 }

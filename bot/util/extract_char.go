@@ -3,14 +3,13 @@ package util
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 )
 
-func ExtractChar(imageData []byte) (string, error) {
+func ExtractChar(imageData []byte) string {
 
 	key := os.Getenv("AZURE_COMPUTER_VISION_KEY")
 	endpoint := os.Getenv("AZURE_COMPUTER_VISION_ENDPOINT")
@@ -24,7 +23,7 @@ func ExtractChar(imageData []byte) (string, error) {
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Print(err)
-		return "", errors.New("[Error] Azure Computer Vision Client Error!")
+		return ""
 	}
 	defer resp.Body.Close()
 
@@ -34,7 +33,7 @@ func ExtractChar(imageData []byte) (string, error) {
 	err = json.Unmarshal([]byte(dataStr), &data)
 	if err != nil {
 		log.Print(err)
-		return "", errors.New("[Error] Json Parsing Error!")
+		return ""
 	}
 
 	// 文字列に整形
@@ -52,5 +51,5 @@ func ExtractChar(imageData []byte) (string, error) {
 		}
 	}
 
-	return imageStr, nil
+	return imageStr
 }
