@@ -2,6 +2,7 @@ package util
 
 import (
 	"context"
+	"errors"
 	"log"
 	"os"
 
@@ -9,7 +10,7 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
-func GetAccessToken(refreshToken string) string {
+func GetAccessToken(refreshToken string) (string, error) {
 
 	config := &oauth2.Config{
 		ClientID:     os.Getenv("GOOGLE_OAUTH_CLIENT_ID"),
@@ -26,8 +27,8 @@ func GetAccessToken(refreshToken string) string {
 	newToken, err := config.TokenSource(ctx, token).Token()
 	if err != nil {
 		log.Print(err)
-		return ""
+		return "", errors.New("[ERROR] Generate Access Token Error!")
 	}
 
-	return newToken.AccessToken
+	return newToken.AccessToken, nil
 }
