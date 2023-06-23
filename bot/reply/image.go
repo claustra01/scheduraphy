@@ -13,17 +13,15 @@ func Image(bot *linebot.Client, event *linebot.Event, message *linebot.ImageMess
 
 	// DBからリフレッシュトークンを取得
 	sendUserId := event.Source.UserID
-	refreshToken, err := query.GetRefreshToken(sendUserId)
-	if err != nil {
-		log.Print(err)
+	refreshToken := query.GetRefreshToken(sendUserId)
+	if refreshToken == "" {
 		Unregistered(bot, event)
 		return
 	}
 
 	// アクセストークンを取得
-	accessToken, err := util.GetAccessToken(refreshToken)
-	if err != nil {
-		log.Print(err)
+	accessToken := util.GetAccessToken(refreshToken)
+	if accessToken == "" {
 		Expired(bot, event)
 		return
 	}
@@ -44,26 +42,17 @@ func Image(bot *linebot.Client, event *linebot.Event, message *linebot.ImageMess
 	}
 
 	// 文字抽出&整形
-	imageStr, err := util.ExtractChar(imageData)
-	if err != nil {
-		log.Print(err)
-		Others(bot, event)
-		return
-	}
-	eventData, err := util.FormatJson(imageStr)
-	if err != nil {
-		log.Print(err)
-		Others(bot, event)
-		return
-	}
+	imageStr := util.ExtractChar(imageData)
+	eventData := util.FormatJson(imageStr)
 
 	// カレンダーに登録
-	err = util.RegisterEvent(eventData, accessToken)
-	if err == nil {
+	result := util.RegisterEvent(eventData, accessToken)
+	switch result {
+	case "Successful":
 		Successful(bot, event, eventData)
-	} else if err == util.NoEventError {
+	case "ImageError":
 		NoEvent(bot, event)
-	} else {
+	default:
 		Others(bot, event)
 	}
 
