@@ -2,6 +2,7 @@ package util
 
 import (
 	"context"
+	"errors"
 	"log"
 	"os"
 
@@ -10,12 +11,15 @@ import (
 	"google.golang.org/api/calendar/v3"
 )
 
-func RegisterEvent(data interface{}, accessToken string) string {
+var NoEventError error
+
+func RegisterEvent(data interface{}, accessToken string) error {
 
 	// 画像が読み込めているか確認
 	eventType := data.(map[string]interface{})["type"].(string)
 	if eventType == "null" {
-		return "ImageError"
+		NoEventError = errors.New("[Error] No Event Error!")
+		return NoEventError
 	}
 
 	// 認証してカレンダーを作成
@@ -35,7 +39,7 @@ func RegisterEvent(data interface{}, accessToken string) string {
 	srv, err := calendar.New(client)
 	if err != nil {
 		log.Print(err)
-		return ""
+		return errors.New("[Error] Calendar Client Error!")
 	}
 
 	// 登録する予定の情報を作成
@@ -62,8 +66,8 @@ func RegisterEvent(data interface{}, accessToken string) string {
 	event, err = srv.Events.Insert(calendarID, event).Do()
 	if err != nil {
 		log.Print(err)
-		return ""
+		return errors.New("[Error] Insert Event Error!")
 	}
 
-	return "Successful"
+	return nil
 }
