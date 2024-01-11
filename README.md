@@ -4,8 +4,9 @@
 
 ## 使用技術
 - Golang
+- React / Vite / Next.js
+- PostgreSQL
 - LINE Messaging API
-- TypeScript
 - LIFF
 - Azure Computer Vision
 - Google OAuth
