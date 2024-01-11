@@ -9,6 +9,7 @@
 - LINE Messaging API
 - LIFF
 - Azure Computer Vision
+- OpenAI API
 - Google OAuth
 - Google Calndar API
 
